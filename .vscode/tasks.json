@@ -1,0 +1,46 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "docker-build",
+			"label": "docker-build",
+			"platform": "node",
+			"dockerBuild": {
+				"dockerfile": "${workspaceFolder}/actividad-evaluacion/Dockerfile",
+				"context": "${workspaceFolder}/actividad-evaluacion",
+				"pull": true
+			},
+			"node": {
+				"package": "${workspaceFolder}/actividad-evaluacion/package.json"
+			}
+		},
+		{
+			"type": "docker-run",
+			"label": "docker-run: release",
+			"dependsOn": [
+				"docker-build"
+			],
+			"platform": "node",
+			"node": {
+				"package": "${workspaceFolder}/actividad-evaluacion/package.json"
+			}
+		},
+		{
+			"type": "docker-run",
+			"label": "docker-run: debug",
+			"dependsOn": [
+				"docker-build"
+			],
+			"dockerRun": {
+				"env": {
+					"DEBUG": "*",
+					"NODE_ENV": "development"
+				}
+			},
+			"node": {
+				"package": "${workspaceFolder}/actividad-evaluacion/package.json",
+				"enableDebugging": true
+			}
+		}
+	]
+}
